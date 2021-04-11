@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
@@ -32,9 +30,15 @@ var id;
 
 function parseData(data){
   var taxonData = JSON.stringify(data);
+  if(taxonData.indexOf("0") == 17){
+    console.log("Species " + args + " does not exist");
+    msg.reply("Error: Species does not exist");
+    return;
+  }
   console.log(taxonData);
   console.log("id at: " + taxonData.indexOf("\"id\":"));
-  id = taxonData.substr(taxonData.indexOf("\"id\":") + 5, 6);
+  id = taxonData.slice(taxonData.indexOf("\"id\":") + 5, taxonData.indexOf(",", taxonData.indexOf("\"id\":") + 5));
+
   console.log("Species ID: " + id);
   const mapLink = "https://api.inaturalist.org/v1/taxon_places/" + id + "/0/0/0.png";
   displayMap(mapLink);
